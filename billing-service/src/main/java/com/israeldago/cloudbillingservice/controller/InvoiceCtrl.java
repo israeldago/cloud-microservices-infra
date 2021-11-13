@@ -1,6 +1,6 @@
 package com.israeldago.cloudbillingservice.controller;
 
-import com.israeldago.cloudbillingservice.domain.dto.InvoiceFullResponseDTO;
+import com.israeldago.cloudbillingservice.domain.dto.InvoiceResponseDTO;
 import com.israeldago.cloudbillingservice.domain.dto.InvoiceRequestDTO;
 import com.israeldago.cloudbillingservice.service.InvoiceService;
 import lombok.AllArgsConstructor;
@@ -19,7 +19,7 @@ public class InvoiceCtrl {
     private final InvoiceService service;
 
     @GetMapping("/invoices")
-    public List<InvoiceFullResponseDTO> getAllInvoices(
+    public List<InvoiceResponseDTO> getAllInvoices(
             @RequestParam(value = "customer", required = false) String customerId) {
         return ofNullable(customerId)
                 .map(cId -> service.getCustomerInvoices(UUID.fromString(cId)))
@@ -27,12 +27,12 @@ public class InvoiceCtrl {
     }
 
     @GetMapping("/invoices/{invoiceId}")
-    public InvoiceFullResponseDTO getInvoice(@PathVariable String invoiceId) {
+    public InvoiceResponseDTO getInvoice(@PathVariable String invoiceId) {
         return service.getInvoice(UUID.fromString(invoiceId));
     }
 
     @PostMapping("/invoices")
-    public InvoiceFullResponseDTO saveInvoice(@RequestBody InvoiceRequestDTO requestDTO) {
+    public InvoiceResponseDTO saveInvoice(@RequestBody InvoiceRequestDTO requestDTO) {
         return service.saveInvoice(requestDTO);
     }
 

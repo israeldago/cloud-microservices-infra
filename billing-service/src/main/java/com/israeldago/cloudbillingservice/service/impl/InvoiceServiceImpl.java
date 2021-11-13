@@ -1,9 +1,8 @@
 package com.israeldago.cloudbillingservice.service.impl;
 
 import com.israeldago.cloudbillingservice.client.CustomerApiClient;
-import com.israeldago.cloudbillingservice.domain.dto.InvoiceFullResponseDTO;
-import com.israeldago.cloudbillingservice.domain.dto.InvoiceRequestDTO;
 import com.israeldago.cloudbillingservice.domain.dto.InvoiceResponseDTO;
+import com.israeldago.cloudbillingservice.domain.dto.InvoiceRequestDTO;
 import com.israeldago.cloudbillingservice.exceptions.CustomerNotFoundException;
 import com.israeldago.cloudbillingservice.exceptions.InvoiceNotFoundException;
 import com.israeldago.cloudbillingservice.mappers.InvoiceMapper;
@@ -28,7 +27,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     private final InvoiceMapper mapper;
 
     @Override
-    public InvoiceFullResponseDTO saveInvoice(InvoiceRequestDTO requestDTO) {
+    public InvoiceResponseDTO saveInvoice(InvoiceRequestDTO requestDTO) {
         final var customer =
                 customerApiClient.findCustomerById(requestDTO.getCustomerId())
                                  .orElseThrow(CustomerNotFoundException::new);
@@ -38,32 +37,32 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoice.setCreatedAt(LocalDateTime.now());
 
         final var saved = repository.save(invoice);
-        final var responseDTO = mapper.toFullResponseDTO(saved);
+        final var responseDTO = mapper.toResponseDTO(saved);
         responseDTO.setCustomer(customer);
         return responseDTO;
     }
 
     @Override
-    public InvoiceFullResponseDTO getInvoice(UUID invoiceId) {
+    public InvoiceResponseDTO getInvoice(UUID invoiceId) {
         final var invoice = repository.findById(invoiceId).orElseThrow(InvoiceNotFoundException::new);
         final var customer =
                 customerApiClient.findCustomerById(invoice.getCustomerId())
                                  .orElseThrow(CustomerNotFoundException::new);
 
-        final var responseDTO = mapper.toFullResponseDTO(invoice);
+        final var responseDTO = mapper.toResponseDTO(invoice);
         responseDTO.setCustomer(customer);
         return responseDTO;
     }
 
     @Override
-    public List<InvoiceFullResponseDTO> getAllInvoices() {
+    public List<InvoiceResponseDTO> getAllInvoices() {
         return repository.findAll()
                          .stream()
                          .map(invoice -> {
                              final var customer =
                                      customerApiClient.findCustomerById(invoice.getCustomerId())
                                                       .orElseThrow(CustomerNotFoundException::new);
-                             final var responseDTO = mapper.toFullResponseDTO(invoice);
+                             final var responseDTO = mapper.toResponseDTO(invoice);
                              responseDTO.setCustomer(customer);
                              return responseDTO;
                          })
@@ -71,14 +70,14 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     @Override
-    public List<InvoiceFullResponseDTO> getCustomerInvoices(UUID customerId) {
+    public List<InvoiceResponseDTO> getCustomerInvoices(UUID customerId) {
         final var customer =
                 customerApiClient.findCustomerById(customerId)
                                  .orElseThrow(CustomerNotFoundException::new);
 
         return repository.findByCustomerId(customerId)
                          .stream()
-                         .map(mapper::toFullResponseDTO)
+                         .map(mapper::toResponseDTO)
                          .peek(responseDTO -> responseDTO.setCustomer(customer))
                          .collect(Collectors.toList());
     }

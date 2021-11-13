@@ -15,4 +15,5 @@ public class InvoiceResponseDTO {
     private UUID id;
     private LocalDateTime createdAt;
     private BigDecimal amount;
+    private CustomerDTO customer;
 }
