@@ -30,7 +30,7 @@
         <module>gateway</module>
         <module>customer-service</module>
         <module>billing-service</module>
-        <module>global-config</module> <!--Unidirectional inheritance-->
+        <module>global-config</module>
     </modules>
 
     <dependencyManagement>
@@ -46,14 +46,6 @@
     </dependencyManagement>
 
     <dependencies>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-config</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-bootstrap</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -72,7 +64,7 @@
                     <source>${java.version}</source> <!-- depending on your project -->
                     <target>${java.version}</target> <!-- depending on your project -->
                     <annotationProcessorPaths>
-<!--                        Always LOMBOK before MAPSTRUCT-->
+                        <!--Always LOMBOK before MAPSTRUCT-->
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
