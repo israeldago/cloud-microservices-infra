@@ -11,4 +11,5 @@ public interface InvoiceService {
     InvoiceResponseDTO getInvoice(UUID invoiceId);
     List<InvoiceResponseDTO> getAllInvoices();
     List<InvoiceResponseDTO> getCustomerInvoices(UUID customerId);
+    void delete(UUID invoiceId);
 }

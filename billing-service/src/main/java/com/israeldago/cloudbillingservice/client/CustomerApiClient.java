@@ -13,7 +13,7 @@ import java.util.UUID;
 public interface CustomerApiClient {
 
     @GetMapping("/api/customers/{customerId}")
-    Optional<CustomerDTO> findCustomerById(@PathVariable UUID customerId);
+    CustomerDTO findCustomerById(@PathVariable UUID customerId);
 
     @GetMapping("/api/customers/{customerId}")
     List<CustomerDTO> findAllCustomers();

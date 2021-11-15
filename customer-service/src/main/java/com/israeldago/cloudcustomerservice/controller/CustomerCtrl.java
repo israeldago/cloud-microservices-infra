@@ -24,8 +24,8 @@ public class CustomerCtrl {
     }
 
     @GetMapping("/{customerId}")
-    CustomerDTO getByCustomerId(@PathVariable String customerId) {
-        return service.getByCustomerId(UUID.fromString(customerId));
+    CustomerDTO getByCustomerId(@PathVariable UUID customerId) {
+        return service.getByCustomerId(customerId);
     }
 
     @PostMapping
@@ -34,15 +34,20 @@ public class CustomerCtrl {
     }
 
     @PutMapping("{customerId}")
-    CustomerDTO update(@PathVariable String customerId, @RequestBody CustomerDTO customerDTO) {
-        return service.update(UUID.fromString(customerId), customerDTO);
+    CustomerDTO update(@PathVariable UUID customerId, @RequestBody CustomerDTO customerDTO) {
+        return service.update(customerId, customerDTO);
     }
 
     @PatchMapping("{customerId}")
-    CustomerDTO patch(@PathVariable String customerId, @RequestBody Map<String, String> customerDetails) {
-        return service.patch(UUID.fromString(customerId), customerDetails);
+    CustomerDTO patch(@PathVariable UUID customerId, @RequestBody Map<String, String> customerDetails) {
+        return service.patch(customerId, customerDetails);
     }
 
+    @DeleteMapping("{customerId}")
+    public ResponseEntity<?> delete(@PathVariable UUID customerId) {
+        service.delete(customerId);
+        return ResponseEntity.noContent().build();
+    }
 
     @ExceptionHandler(CustomerNotFoundException.class)
     ResponseEntity<String> onCustomerNotFoundException(Exception e) {

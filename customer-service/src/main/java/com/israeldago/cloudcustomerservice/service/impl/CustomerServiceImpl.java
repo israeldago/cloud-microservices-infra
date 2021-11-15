@@ -42,10 +42,12 @@ class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerDTO update(UUID customerId, CustomerDTO customerDTO) {
-        final var customer = mapper.fromDTO(customerDTO);
-        customer.setId(customerId);
-        final var saved = repository.save(customer);
-        return mapper.toDTO(saved);
+        customerDTO.setId(customerId);
+        return repository.findById(customerDTO.getId())
+                         .map(c -> mapper.fromDTO(customerDTO))
+                         .map(repository::save)
+                         .map(mapper::toDTO)
+                         .orElseThrow(CustomerNotFoundException::new);
     }
 
     @Override
@@ -53,6 +55,12 @@ class CustomerServiceImpl implements CustomerService {
         return repository.findById(customerId)
                          .map(customerWithGivenPatch(customerDetails))
                          .orElseThrow(CustomerNotFoundException::new);
+    }
+
+    @Override
+    public void delete(UUID customerId) {
+        final var found = getByCustomerId(customerId);
+        repository.delete(mapper.fromDTO(found));
     }
 
     @Override

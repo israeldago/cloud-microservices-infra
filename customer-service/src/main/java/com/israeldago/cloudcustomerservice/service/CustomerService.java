@@ -20,6 +20,8 @@ public interface CustomerService {
 
     CustomerDTO patch(UUID customerId, Map<String, String> customerDetails);
 
+    void delete(UUID customerId);
+
     List<CustomerDTO> findAll();
 
     @SneakyThrows
